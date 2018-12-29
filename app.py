@@ -21,7 +21,7 @@ def configured_app():
     app.secret_key = secret.secret_key
 
     # 现在 mysql root 默认用 socket 来验证而不是密码
-    uri = 'mysql+pymysql://root@127.0.0.1/web21?charset=utf8mb4&unix_socket=/var/run/mysqld/mysqld.sock'
+    uri = 'mysql+pymysql://root:{}@127.0.0.1/web21?charset=utf8mb4'.format(secret.database_password)
     app.config['SQLALCHEMY_DATABASE_URI'] = uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
