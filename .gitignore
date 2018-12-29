@@ -1,0 +1,16 @@
+.idea
+
+*.py[cod]
+__pycache__/
+.env
+.gitattributes
+
+
+secret.py
+gua.log.txt
+
+Vagrantfile
+mirror.sh
+misc/
+
+*.log
