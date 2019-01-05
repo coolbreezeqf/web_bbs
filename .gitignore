@@ -5,9 +5,12 @@ __pycache__/
 .env
 .gitattributes
 
+images/
+!images/default_*
+!images/favicon.ico
+!images/icon*
 
 secret.py
-gua.log.txt
 
 Vagrantfile
 mirror.sh
