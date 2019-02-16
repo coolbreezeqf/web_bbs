@@ -8,10 +8,12 @@ from models.reply import Reply
 from models.topic import Topic
 from models.user import User
 
+from faker import Faker
+from random import randint
+
 
 def reset_database():
-    # 现在 mysql root 默认用 socket 来验证而不是密码
-    uri = 'mysql+pymysql://root@127.0.0.1/?charset=utf8mb4&unix_socket=/var/run/mysqld/mysqld.sock'
+    uri = 'mysql+pymysql://root:{}@127.0.0.1/?charset=utf8mb4'.format(secret.database_password)
     e = create_engine(uri, echo=True)
 
     with e.connect() as c:
@@ -22,16 +24,12 @@ def reset_database():
     db.metadata.create_all(bind=e)
 
 
-def generate_fake_date():
+def generate_fake_data():
+    cn_fake = Faker(locale='zh_CN')
+    fake = Faker()
     form = dict(
         username='test',
-        password='123',
-    )
-    u = User.register(form)
-
-    form = dict(
-        username='test2',
-        password='123',
+        password='test',
     )
     u = User.register(form)
 
@@ -39,28 +37,51 @@ def generate_fake_date():
         title='all'
     )
     b = Board.new(form)
+
+    for i in range(50):
+        form = dict(
+            username=fake.name(),
+            password=fake.password()
+        )
+        u = User.register(form)
+
+
+    for i in range(100):
+        print('fake data:', i)
+        topic_form = dict(
+            title=fake.sentence(nb_words=randint(4, 6)),
+            board_id=b.id,
+            content=fake.text(max_nb_chars=400),
+            views=randint(10, 100),
+        )
+        t = Topic.new(topic_form, randint(1, 51))
+
+        for j in range(randint(4,10)):
+            reply_form = dict(
+                content=fake.text(max_nb_chars=200),
+                topic_id=t.id,
+            )
+            Reply.new(reply_form, randint(1, 51))
+
     with open('static/doc/markdown_demo.md', encoding='utf8') as f:
         content = f.read()
-    topic_form = dict(
-        title='markdown demo',
-        board_id=b.id,
-        content=content
-    )
-
-    for i in range(10):
-        print('begin topic <{}>'.format(i))
-        t = Topic.new(topic_form, u.id)
-
+        b = Board.new(dict(title='demo'))
+        topic_form = dict(
+            title='markdown 示例',
+            board_id=b.id,
+            content=content,
+            views=randint(10, 100),
+        )
+        t = Topic.new(topic_form, randint(1, 51))
         reply_form = dict(
-            content='reply test',
+            content=content,
             topic_id=t.id,
         )
-        for j in range(5):
-            Reply.new(reply_form, u.id)
+        Reply.new(reply_form, randint(1, 51))
 
 
 if __name__ == '__main__':
     app = configured_app()
     with app.app_context():
         reset_database()
-        generate_fake_date()
+        generate_fake_data()

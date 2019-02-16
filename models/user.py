@@ -17,6 +17,8 @@ class User(SQLMixin, db.Model):
     password = Column(String(100), nullable=False)
     image = Column(String(100), nullable=False, default='/images/default_avatar.jpg')
     email = Column(String(50), nullable=False, default=config.test_mail)
+    describe = Column(String(200), nullable=False, default='这家伙很懒，什么个性签名都没有留下。')
+
 
     @staticmethod
     def salted_password(password, salt='$!@><?>HUI&DWQa`'):
@@ -47,3 +49,11 @@ class User(SQLMixin, db.Model):
         )
         print('validate_login', form, query)
         return User.one(**query)
+
+    def validate_password(self, password):
+        pwd = User.salted_password(password)
+        return pwd == self.password
+
+    def update_password(self, new_password):
+        self.password = User.salted_password(new_password)
+        self.save()

@@ -10,6 +10,7 @@ from models.message import Messages
 from routes import *
 
 from models.reply import Reply
+from utils import log
 
 
 main = Blueprint('reply', __name__)
@@ -34,7 +35,9 @@ def users_from_content(content):
 
 
 def send_mails(sender, receivers, reply_link, reply_content):
-    print('send_mail', sender, receivers, reply_content)
+    if not receivers:
+        return
+    log('send_mail', sender, receivers, reply_content)
     content = '链接：{}\n内容：{}'.format(
         reply_link,
         reply_content
