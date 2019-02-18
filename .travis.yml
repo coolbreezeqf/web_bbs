@@ -3,7 +3,8 @@ python:
   - "3.6"
 sudo: required
 
-before_install: true
+before_install:
+  - openssl aes-256-cbc -K $encrypted_3d7946dbf723_key -iv $encrypted_3d7946dbf723_iv -in secret.py.enc -out secret.py -d
 install:
   - pip install -r requirements/dev.txt
 
