@@ -1,6 +1,8 @@
+from faker import Faker
+from random import randint
+
 from sqlalchemy import create_engine
 
-import secret
 from app import configured_app
 from models.base_model import db
 from models.board import Board
@@ -8,8 +10,7 @@ from models.reply import Reply
 from models.topic import Topic
 from models.user import User
 
-from faker import Faker
-from random import randint
+import secret
 
 
 def reset_database():
@@ -25,13 +26,15 @@ def reset_database():
 
 
 def generate_fake_data():
-    cn_fake = Faker(locale='zh_CN')
+    # cn_fake = Faker(locale='zh_CN')
     fake = Faker()
     form = dict(
         username='test',
         password='test',
     )
-    u = User.register(form)
+    test_user = User.register(form)
+    if not test_user:
+        print('test user create fail')
 
     form = dict(
         title='all'
@@ -43,8 +46,7 @@ def generate_fake_data():
             username=fake.name(),
             password=fake.password()
         )
-        u = User.register(form)
-
+        User.register(form)
 
     for i in range(100):
         print('fake data:', i)
@@ -56,7 +58,7 @@ def generate_fake_data():
         )
         t = Topic.new(topic_form, randint(1, 51))
 
-        for j in range(randint(4,10)):
+        for j in range(randint(4, 10)):
             reply_form = dict(
                 content=fake.text(max_nb_chars=200),
                 topic_id=t.id,
