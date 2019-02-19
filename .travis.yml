@@ -3,10 +3,12 @@ python:
 - '3.6'
 sudo: required
 before_install:
-- openssl aes-256-cbc -K $encrypted_3d7946dbf723_key -iv $encrypted_3d7946dbf723_iv
-  -in secret.py.enc -out secret.py -d
+- openssl aes-256-cbc -k "$super_secret_password" -in secret.py.enc -out secret.py -d
 install:
 - pip install -r requirements/dev.txt
 script:
 - pylint --output-format=text app.py
 - python -m unittest discover
+env:
+  global:
+    secure: RnhdDmZAk4LNnu04TbAVL5uHgVvUyvACDenpP8zi9sCQx/J7zAl24XwMRcmD8gWf6rF5kP1fj4Zg4pVvMklt0mzjdcu3Mz5CGHkWxWbG0D5YYMDnxRmEOY3M5QU+KFhUpgYmZg4LCfxgR/3wptFxwnBE95tQhYHYQCkblJq2fLPV59OfdReY64JkCCjDI06IxbGfDWS4hnePOaXH1JOVwFwJaK5WHU1KbAWkB9uJP0AlUVDbw8iH7dEtsXOQAvHPArjJ4gm5H2srk73tkVVIJY5blOip5r5nX0QX92vjO26AiYpoOdpNkNXGj/kBzC+LoNqwDhbuEDLbY5sOfJgXD2nvyLdnFRln1Z3jORyD5bHh7Ckfs+tC+auRr6vdYHYrWguB7p+NgJtZvTUmmGduR3b8TYIzTF1O+RKBQ/3lznXpWCpg/8m/K2CKNQ6VIMoFeEwZdfzJu/7Tae1+U7oVEoudCZTIw4Of0MsfHS5nVTtDFp895Qs9YK3pUzum2xIcsGHFQScZoGWjYuOnP1AJmqPx/fpQRzrYAWs8dZDbU5e47u5Qd2U7W0qrkGtmnzl4Dt3IvnwITl4dg/RWY+LhnORJxZsDcH8pKMPP3IXgh4FpNVGg6rkTaP9ie/FsTSGvKHJjRo5ZpzyPxFBuoXHXP3NqJXGSGhTwy5LfWUvbfxQ=
