@@ -38,13 +38,13 @@ mysql -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
 rm -f /etc/nginx/sites-enabled/default
 rm -f /etc/nginx/sites-available/default
 
-cp /var/www/web21/web21.conf /etc/supervisor/conf.d/web21.conf
+cp /var/www/web_bbs/web_bbs.conf /etc/supervisor/conf.d/web_bbs.conf
 # 不要再 sites-available 里面放任何东西
-cp /var/www/web21/web21.nginx /etc/nginx/sites-enabled/web21
-chmod -R o+rwx /var/www/web21
+cp /var/www/web_bbs/web_bbs.nginx /etc/nginx/sites-enabled/web_bbs
+chmod -R o+rwx /var/www/web_bbs
 
 # 初始化
-cd /var/www/web21
+cd /var/www/web_bbs
 python3 reset.py
 
 # 重启服务器
