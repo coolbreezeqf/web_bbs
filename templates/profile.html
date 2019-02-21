@@ -1,40 +1,141 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>profile</title>
-</head>
-<body>
-<h1>用户资料页面</h1>
-<div>
-    {{ user.id }}
-</div>
-<div>
-    {{ user.username }}
-</div>
+{% extends "base.html" %}
+{% block title %}Profile: {{ user.username }}{% endblock %}
 
-<div>
-    <div>创建的</div>
-    {% for t in created %}
-        <a href="{{ url_for('topic.detail', id=t.id) }}">{{ t.title }}</a>
-    {% endfor %}
-</div>
-<div>
-    <div>参与的</div>
-    {% for t in replied %}
-        <a href="{{ url_for('topic.detail', id=t.id) }}">{{ t.title }}</a>
-    {% endfor %}
-</div>
+{% block content %}
+        <div class="panel">
+            <div class="header">
+                <ul class="breadcrumb">
+                    <li><a href="{{ url_for('index.index') }}">主页</a><span class="divider">/</span></li>
+                    <li class="active">用户信息</li>
+                </ul>
+            </div>
+            <div class="inner userinfo">
+                <div class="user_big_avatar">
+                    <img src="{{ user.image }}" class="user_avatar" title="{{ user.username }}">
+                </div>
+                <a class="dark">{{ user.username }}</a>
 
-<form method="post"
-      action="{{ url_for('.avatar_add')}}"
-      enctype="multipart/form-data"
->
-    <input type="file" name="avatar">
-    <button type="submit">上传头像</button>
-</form>
+                <div class="user_profile">
+                    <ul class="unstyled">
+                        <span class="signature">
+                            “
+                                 {{ user.describe }}
+                            ”
+                        </span>
+{#                        <span class="big">540</span> 积分#}
+{##}
+{#                        <li>#}
+{#                            <a class="dark" href="https://cnodejs.org/user/fuxingZhang/collections" target="_blank">#}
+{#                                <span class="big collect-topic-count">1</span>个话题收藏#}
+{#                            </a>#}
+{#                        </li>#}
+{##}
+{##}
+{#                        <li>#}
+{#                            <i class="fa fa-lg fa-fw fa-github"></i>#}
+{#                            <a class="dark" href="https://github.com/fuxingZhang" target="_blank">#}
+{#                                @fuxingZhang#}
+{#                            </a>#}
+{#                        </li>#}
+{##}
+{##}
+                    </ul>
+                </div>
+                <p class="col_fade">注册时间 9 个月前</p>
 
-<img src="{{ user.image }} ">
+            </div>
+        </div>
 
-</body>
-</html>
+        <div class="panel">
+            <div class="header">
+                <span class="col_fade">最近创建的话题</span>
+            </div>
+            {% for topic in created %}
+            <div class="cell">
+
+                <a class="user_avatar pull-left" href="{{ url_for('index.index', username=user.username) }}">
+                    <img src="{{ user.image }}" title="{{ user.username }}">
+                </a>
+
+                <span class="reply_count pull-left">
+                    <span class="count_of_replies" title="回复数">
+                      {{ topic.reply_count() }}
+                    </span>
+                    <span class="count_seperator">/</span>
+                    <span class="count_of_visits" title="点击数">
+                      {{ topic.views }}
+                    </span>
+                  </span>
+
+                {% if topic.reply_count() != 0 %}
+                    {% set reply_user = topic.replies()[-1].user() %}
+                {% else %}
+                    {% set reply_user = current_user %}
+                {% endif %}
+                <a class="last_time pull-right"
+                   href="{{ url_for('index.profile', username=reply_user.username) }}">
+                    <img class="user_small_avatar" src="{{ reply_user.image }}">
+                    <span class="last_active_time">1 小时前</span>
+                </a>
+
+
+                <div class="topic_title_wrapper">
+                    <a class="topic_title" href="{{ url_for('topic.detail', id=topic.id) }}"
+                       title="{{ topic.title }}">
+                        {{ topic.title }}
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="cell more">
+                <a class="dark" href="#">查看更多»</a>
+            </div>
+
+        </div>
+
+        <div class="panel">
+            <div class="header">
+                <span class="col_fade">最近参与的话题</span>
+            </div>
+            {% for topic in replied %}
+            <div class="cell">
+                {% set topic_user = topic.user() %}
+                <a class="user_avatar pull-left" href="{{ url_for('index.profile', username=topic_user.username) }}">
+                    <img src="{{ topic_user.image }}" title="{{ topic_user.username }}">
+                </a>
+
+                <span class="reply_count pull-left">
+                    <span class="count_of_replies" title="回复数">
+                      {{ topic.reply_count() }}
+                    </span>
+                    <span class="count_seperator">/</span>
+                    <span class="count_of_visits" title="点击数">
+                      {{ topic.views }}
+                    </span>
+                  </span>
+                {% if topic.reply_count() != 0 %}
+                    {% set reply_user = topic.replies()[-1].user() %}
+                {% else %}
+                    {% set reply_user = current_user %}
+                {% endif %}
+                <a class="last_time pull-right"
+                   href="{{ url_for('index.profile', username=reply_user.username) }}">
+                    <img class="user_small_avatar" src="{{ reply_user.image }}">
+                    <span class="last_active_time">1 小时前</span>
+                </a>
+
+                <div class="topic_title_wrapper">
+                    <a class="topic_title" href="{{ url_for('topic.detail', id=topic.id) }}"
+                       title="{{ topic.title }}">
+                        {{ topic.title }}
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="cell more">
+                <a class="dark" href="#">查看更多»</a>
+            </div>
+
+        </div>
+{% endblock %}

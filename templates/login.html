@@ -1,13 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form method="POST" action={{ url_for(".login") }}>
-    <input type="text" name="user_name" placeholder="user_name">
-    <button type="submit">提交</button>
-</form>
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+    <div class="panel">
+        <div class="header">
+            <ul class="breadcrumb">
+                <li><a href="{{ url_for('index.index') }}">主页</a><span class="divider">/</span></li>
+                <li class="active">登陆注册</li>
+            </ul>
+        </div>
+        <div class="cell">
+            <form class="form-horizontal" method="post" action="{{ url_for('.register') }}">
+                <div class="control-group">
+                    <label class="control-label">用户名</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" name="username">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">密码</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" name="password">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input type="submit" class="span-primary" value="注册">
+                </div>
+            </form>
+        </div>
+        <div class="cell">
+            <form class="form-horizontal" method="post" action="{{ url_for('.login') }}">
+                <div class="control-group">
+                    <label class="control-label">用户名</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" name="username">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">密码</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" name="password">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <input type="submit" class="span-primary" value="登录">
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

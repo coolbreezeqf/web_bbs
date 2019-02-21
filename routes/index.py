@@ -30,20 +30,13 @@ from utils import log
 
 main = Blueprint('index', __name__)
 
-"""
-用户在这里可以
-    访问首页
-    注册
-    登录
-
-用户登录后, 会写入 session, 并且定向到 /profile
-"""
 
 
 @main.route("/")
 def index():
-    u = current_user()
-    return render_template("index.html", user=u)
+    # u = current_user()
+    # return render_template("index.html", user=u)
+    return redirect(url_for('topic.index'))
 
 
 @main.route("/register", methods=['POST'])
@@ -54,19 +47,28 @@ def register():
     return redirect(url_for('.index'))
 
 
-@main.route("/login", methods=['POST'])
+@main.route("/login", methods=['GET', 'POST'])
 def login():
     form = request.form
-    u = User.validate_login(form)
-    if u is None:
-        return redirect(url_for('.index'))
+    if form:
+        u = User.validate_login(form)
+        if u is None:
+            return redirect(url_for('.index'))
+        else:
+            # session 中写入 user_id
+            session['user_id'] = u.id
+            # 设置 cookie 有效期为 永久
+            session.permanent = True
+            # 转到 topic.index 页面
+            return redirect(url_for('topic.index'))
     else:
-        # session 中写入 user_id
-        session['user_id'] = u.id
-        # 设置 cookie 有效期为 永久
-        session.permanent = True
-        # 转到 topic.index 页面
-        return redirect(url_for('topic.index'))
+        return render_template('login.html')
+
+@main.route("/logout")
+def logout():
+    if 'user_id' in session:
+        session.pop('user_id')
+    return redirect(url_for('.login'))
 
 
 def created_topic(user_id):
@@ -114,20 +116,62 @@ def replied_topic(user_id):
 
 
 @main.route('/profile')
-def profile():
-    print('running profile route')
+@main.route('/profile/<string:username>')
+def profile(username=None):
+    if username:
+        u = User.one(username=username)
+        if u is None:
+            return abort(404)
+    else:
+        u = current_user()
+        if u is None:
+            return redirect(url_for('.login'))
+
+    create_topic = Topic.all(user_id=u.id)
+    create_topic = sorted(create_topic, key=lambda k: k.created_time, reverse=True)
+
+    reply = Reply.all(user_id=u.id)
+    reply_topic = []
+    for r in reply[::-1]:
+        topic = Topic.one(id=r.topic_id)
+        reply_topic.append(topic)
+
+    return render_template(
+        'profile.html',
+        user=u,
+        created=create_topic,
+        replied=reply_topic,
+    )
+
+
+@main.route('/setting')
+def setting():
     u = current_user()
     if u is None:
         return redirect(url_for('.index'))
     else:
-        created = created_topic(u.id)
-        replied = replied_topic(u.id)
-        return render_template(
-            'profile.html',
-            user=u,
-            created=created,
-            replied=replied
-        )
+        return render_template('setting.html')
+
+
+@main.route('/user/update/profile', methods=['POST'])
+def update_profile():
+    form = request.form.to_dict()
+    user: User = current_user()
+    User.update(user.id, **form)
+    return redirect(url_for('.setting'))
+
+
+@main.route('/user/update/password', methods=['POST'])
+def update_password():
+    form = request.form
+    old_password = form['old_pass']
+    new_password = form['new_pass']
+    user = current_user()
+    if user.validate_password(old_password):
+        user.update_password(new_password)
+        return redirect(url_for('.setting'))
+    else:
+        return "修改失败"
 
 
 @main.route('/user/<int:id>')

@@ -21,9 +21,8 @@ def index():
         ms = Topic.all()
     else:
         ms = Topic.all(board_id=board_id)
-    token = new_csrf_token()
     bs = Board.all()
-    return render_template("topic/index.html", ms=ms, token=token, bs=bs, bid=board_id)
+    return render_template("topic/index.html", ms=ms[::-1], bs=bs, bid=board_id)
 
 
 @main.route('/<int:id>')
@@ -38,8 +37,8 @@ def detail(id):
 def delete():
     id = int(request.args.get('id'))
     u = current_user()
-    print('删除 topic 用户是', u, id)
-    Topic.delete(id)
+    # print('删除 topic 用户是', u, id)
+    Topic.get(id).delete()
     return redirect(url_for('.index'))
 
 
@@ -55,7 +54,7 @@ def new():
 @main.route("/add", methods=["POST"])
 @csrf_required
 def add():
-    form = request.form
+    form = request.form.to_dict()
     u = current_user()
     Topic.new(form, user_id=u.id)
     return redirect(url_for('.index'))

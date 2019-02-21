@@ -8,10 +8,8 @@ var es = function (sel) {
 
 var markContents = function () {
     var contentDivs = es('.markdown-text')
-//    var guaMarkdowns = es('.gua-markdown')
     for (var i = 0; i < contentDivs.length; i++) {
         var contentDiv = contentDivs[i]
-//        var guaMarkdown = guaMarkdowns[i]
         // 掩饰注入攻击
 //         var content = marked(contentDiv.textContent)
         var content = marked(contentDiv.textContent)

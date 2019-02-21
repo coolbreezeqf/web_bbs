@@ -1,0 +1,32 @@
+language: python
+python:
+- '3.6'
+sudo: required
+before_install:
+- openssl aes-256-cbc -k "$super_secret_password" -in secret.py.enc -out secret.py
+  -d
+- openssl aes-256-cbc -k "$ssh_key_password" -in id_rsa.enc -out ~/.ssh/id_rsa -d
+- chmod 600 ~/.ssh/id_rsa
+install:
+- pip install -r requirements/dev.txt
+script:
+- python -m unittest discover
+env:
+  global:
+  - secure: RnhdDmZAk4LNnu04TbAVL5uHgVvUyvACDenpP8zi9sCQx/J7zAl24XwMRcmD8gWf6rF5kP1fj4Zg4pVvMklt0mzjdcu3Mz5CGHkWxWbG0D5YYMDnxRmEOY3M5QU+KFhUpgYmZg4LCfxgR/3wptFxwnBE95tQhYHYQCkblJq2fLPV59OfdReY64JkCCjDI06IxbGfDWS4hnePOaXH1JOVwFwJaK5WHU1KbAWkB9uJP0AlUVDbw8iH7dEtsXOQAvHPArjJ4gm5H2srk73tkVVIJY5blOip5r5nX0QX92vjO26AiYpoOdpNkNXGj/kBzC+LoNqwDhbuEDLbY5sOfJgXD2nvyLdnFRln1Z3jORyD5bHh7Ckfs+tC+auRr6vdYHYrWguB7p+NgJtZvTUmmGduR3b8TYIzTF1O+RKBQ/3lznXpWCpg/8m/K2CKNQ6VIMoFeEwZdfzJu/7Tae1+U7oVEoudCZTIw4Of0MsfHS5nVTtDFp895Qs9YK3pUzum2xIcsGHFQScZoGWjYuOnP1AJmqPx/fpQRzrYAWs8dZDbU5e47u5Qd2U7W0qrkGtmnzl4Dt3IvnwITl4dg/RWY+LhnORJxZsDcH8pKMPP3IXgh4FpNVGg6rkTaP9ie/FsTSGvKHJjRo5ZpzyPxFBuoXHXP3NqJXGSGhTwy5LfWUvbfxQ=
+  - secure: sLRb2X6bMvbCmJRv+vEalfJ+e9SGRwY5Xv7C/TMAY7OLajTBwrw5dZ5LBUwIz0965ne4r1ztHGoMjOF7T3usqV5unXeEIbqZ7R8N+Gv/GUXN1ESYUB4kfYPehDx/JQPM4gALNErE18pGPm6AHkA+51WZIZFYe5vr45/u0JUeKYMz4aW4Onmw6m8sIgyozctQCPpB9W+nzFV0gtaLPpfVTzlxA8Nn3xLY7mmJ8B7kBSXFvaQt89bs0YFJc72/5YlmQcsubNElGjefC8+TVS4FSgPpmPB0rpTWadtWFxklqv7+mjqNJTXXxqGd7kRaSWI2YDjYKJsbrUkYW1LBB4eEk3WodusdF2NwhDD/G9GTuG8j6YwJOrPa2PsZNNwCdBS1qQ0jDj2rR4w40xBj366AQLUeO0NaKH8J5AK1cYAzjnW+Z9hLghQ7p24BiwCdKlHaHCfQxaOvCm10fzyqGknsdURM0zLY6V4UDv57/u1bTBPwgc1wWpraMU54zOQfTla9KQZf89b51WVTDm9IpvGvDoV7dmRCl9gtc0vt44ntzeXQIjjaioxSFTYyW6OjbpVOe0Wl/gicrHJ5rGZB/vkxXf5O8i1QWAphPIO92ZejQGujST5NFQgrlyEy2iWS4/+PjVAsu/D85Vc18lJEM1ybt88G+OBqe3DodyM1oSEiDdE=
+notifications:
+  email:
+    recipients:
+    - 348210751@qq.com
+    on_success: always
+    on_failure: always
+addons:
+  ssh_known_hosts: colbrze.xyz
+deploy:
+  provider: script
+  script:
+  - ssh root@colbrze.xyz "pwd && whoami"
+  skip_cleanup: true
+  on:
+    branch: master

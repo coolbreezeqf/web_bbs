@@ -9,7 +9,7 @@ from models.reply import Reply
 
 class Topic(SQLMixin, db.Model):
     views = Column(Integer, nullable=False, default=0)
-    title = Column(Unicode(50), nullable=False)
+    title = Column(Unicode(100), nullable=False)
     content = Column(UnicodeText, nullable=False)
     user_id = Column(Integer, nullable=False)
     board_id = Column(Integer, nullable=False)

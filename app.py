@@ -3,7 +3,9 @@ from flask import Flask
 import secret
 import config
 from models.base_model import db
+from models.store import redis_store
 
+from routes import current_user
 from routes.index import main as index_routes
 from routes.topic import main as topic_routes
 from routes.reply import main as reply_routes
@@ -33,9 +35,15 @@ def configured_app():
     app.config['MAIL_PASSWORD'] = secret.mail_password
 
     mail.init_app(app)
+    redis_store.init_app(app)
 
+    register_template_func(app)
     register_routes(app)
     return app
+
+
+def register_template_func(app):
+    app.template_global()(current_user)
 
 
 def register_routes(app):
