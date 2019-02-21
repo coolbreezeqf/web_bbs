@@ -26,7 +26,7 @@ addons:
 deploy:
   provider: script
   script:
-  - ssh root@colbrze.xyz "cd /var/www/web_bbs && bash build.sh"
+  - ssh root@colbrze.xyz "cd /var/www/web_bbs && git checkout master && git pull && bash build.sh"
   skip_cleanup: true
   on:
     branch: master

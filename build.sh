@@ -1,7 +1,5 @@
+set -ex
 pwd
-
-git checkout master
-git pull
 
 source .env
 
