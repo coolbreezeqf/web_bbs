@@ -1,6 +1,6 @@
 server {
     listen 80;
-
+    server_name bbs.colbrze.xyz colbrze.xyz www.colbrze.xyz *.colbrze.xyz;
     location /images {
         alias /var/www/web21/images;
     }

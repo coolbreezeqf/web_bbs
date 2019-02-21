@@ -29,10 +29,10 @@ pip3 install jinja2 flask gevent gunicorn pymysql flask_sqlalchemy flask_mail re
 # 正确设置密码验证方式
 # mysql -e "UPDATE mysql.user SET plugin='mysql_native_password' WHERE User='root';"
 # 删除测试用户和测试数据库
-mysql -e "DELETE FROM mysql.user WHERE User='';"
-mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
-mysql -e "DROP DATABASE IF EXISTS test;"
-mysql -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
+# mysql -e "DELETE FROM mysql.user WHERE User='';"
+# mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
+# mysql -e "DROP DATABASE IF EXISTS test;"
+# mysql -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
 
 # 删掉 nginx default 设置
 rm -f /etc/nginx/sites-enabled/default
