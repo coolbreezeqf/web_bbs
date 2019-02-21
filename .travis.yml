@@ -5,7 +5,7 @@ sudo: required
 before_install:
 - openssl aes-256-cbc -k "$super_secret_password" -in secret.py.enc -out secret.py
   -d
-- openssl aes-256-cbc -K "$ssh_key_password" -in id_rsa.enc -out ~/.ssh/id_rsa -d
+- openssl aes-256-cbc -k "$ssh_key_password" -in id_rsa.enc -out ~/.ssh/id_rsa -d
 - chmod 600 ~/.ssh/id_rsa
 install:
 - pip install -r requirements/dev.txt
