@@ -1,34 +1,29 @@
 {% extends "base.html" %}
-{% block title %}{{ topic.title }}{% endblock%}
+{% block title %}{{ topic.title }}{% endblock %}
 {% block content %}
-        <div class='panel'>
-            <div class='header topic_header'>
+    {% set u = topic.user() %}
+    <div class='panel'>
+        <div class='header topic_header'>
         <span class="topic_full_title">
 			{{ topic.title }}
       	</span>
-                <div class="changes">
-            <span>
-                发布于 2 天前
-            </span>
-                    <span>
-                {% set u = topic.user() %}
-                作者 <a href="{{ url_for('index.profile', username=u.username) }}">{{ u.username }}</a>
-        	</span>
-                    <span>
-          	    {{ topic.views }} 次浏览
-        	</span>
-                    <span>
-                来自 问答
-            </span>
-                </div>
-            </div>
-
-            <div class='inner topic'>
-                <div class='topic_content'>
-                    <div class="markdown-text">{{ topic.content}}</div>
-                </div>
+            <div class="changes">
+{#                moment(datetime.fromtimestamp(topic.created_time)).fromNow(refresh=True)#}
+                {% set create_time = datetime.fromtimestamp(topic.created_time) %}
+                <span>发布于 {{ moment(create_time).fromNow(refresh=True) }}</span>
+                <span>作者 <a href="{{ url_for('index.profile', username=u.username) }}">{{ u.username }}</a></span>
+                <span>{{ topic.views }} 次浏览</span>
+                <span>来自 问答</span>
+{#                todo: 问答改成对应的话题#}
             </div>
         </div>
+
+        <div class='inner topic'>
+            <div class='topic_content'>
+                <div class="markdown-text">{{ topic.content }}</div>
+            </div>
+        </div>
+    </div>
 
     <div class='panel'>
         <div class='header'>
@@ -80,43 +75,43 @@
 
 {% block scripts %}
     {{ super() }}
-    <link href="https://cdn.bootcss.com/prism/1.14.0/themes/prism.css" rel="stylesheet" />
-<script src="https://cdn.bootcss.com/marked/0.3.19/marked.min.js"></script>
-<script src="https://cdn.bootcss.com/prism/1.14.0/prism.js"></script>
-<script src="https://cdn.bootcss.com/prism/1.14.0/plugins/autoloader/prism-autoloader.min.js"></script>
-<script>
-    var e = function (sel) {
-        return document.querySelector(sel)
-    }
-
-    var es = function (sel) {
-        return document.querySelectorAll(sel)
-    }
-
-    var markContents = function () {
-        // markdown -> html 的处理放在高亮前面
-        var contentDivs = es('.markdown-text')
-        for (var i = 0; i < contentDivs.length; i++) {
-            var contentDiv = contentDivs[i]
-            //console.log('pre marked', contentDiv.textContent)
-            var content = marked(contentDiv.textContent)
-            //console.log('after marked', content)
-            contentDiv.innerHTML = content
+    <link href="https://cdn.bootcss.com/prism/1.14.0/themes/prism.css" rel="stylesheet"/>
+    <script src="https://cdn.bootcss.com/marked/0.3.19/marked.min.js"></script>
+    <script src="https://cdn.bootcss.com/prism/1.14.0/prism.js"></script>
+    <script src="https://cdn.bootcss.com/prism/1.14.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+        var e = function (sel) {
+            return document.querySelector(sel)
         }
-    }
 
-    var highlight = function() {
-         // 自动加载对应的语言
-        Prism.plugins.autoloader.languages_path = 'https://cdn.bootcss.com/prism/1.14.0/components/'
-    }
+        var es = function (sel) {
+            return document.querySelectorAll(sel)
+        }
 
-    var __main = function () {
-        markContents()
-        highlight()
-    }
+        var markContents = function () {
+            // markdown -> html 的处理放在高亮前面
+            var contentDivs = es('.markdown-text')
+            for (var i = 0; i < contentDivs.length; i++) {
+                var contentDiv = contentDivs[i]
+                //console.log('pre marked', contentDiv.textContent)
+                var content = marked(contentDiv.textContent)
+                //console.log('after marked', content)
+                contentDiv.innerHTML = content
+            }
+        }
 
-    __main()
+        var highlight = function () {
+            // 自动加载对应的语言
+            Prism.plugins.autoloader.languages_path = 'https://cdn.bootcss.com/prism/1.14.0/components/'
+        }
 
-</script>
+        var __main = function () {
+            markContents()
+            highlight()
+        }
+
+        __main()
+
+    </script>
 
 {% endblock %}

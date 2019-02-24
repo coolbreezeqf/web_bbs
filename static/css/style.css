@@ -42,10 +42,10 @@ body {
   overflow: hidden;
 }
 #content .changes span:before {
-  content: "•";
+  content: "|";
 }
 #content .changes a {
-  color: inherit;
+  /*color: inherit;*/
 }
 #content .action {
   float: right;
