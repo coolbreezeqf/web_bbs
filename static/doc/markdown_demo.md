@@ -24,7 +24,7 @@
 | 表格 | 表格 |
 
 
-图片： ![图片](https://pic1.cdncl.net/game/user_upload/pierre/af584936163f7c46c66da212eac16be4.jpg)
+图片： ![图片](/images/doge1.jpg)
 
 
 

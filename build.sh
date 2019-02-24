@@ -2,10 +2,10 @@ set -ex
 pwd
 
 source .env
-
-cp /var/www/web_bbs/web_bbs.conf /etc/supervisor/conf.d/web_bbs.conf
-cp /var/www/web_bbs/web_bbs.nginx /etc/nginx/sites-enabled/web_bbs
+PROJECT="web_bbs"
+cp /var/www/$PROJECT/$PROJECT.conf /etc/supervisor/conf.d/$PROJECT.conf
+cp /var/www/$PROJECT/$PROJECT.nginx /etc/nginx/sites-enabled/$PROJECT
 
 pip3 install -r requirements.txt
-supervisorctl restart web_bbs
+supervisorctl restart $PROJECT
 service nginx restart
