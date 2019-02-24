@@ -8,10 +8,9 @@
 			{{ topic.title }}
       	</span>
             <div class="changes">
-{#                moment(datetime.fromtimestamp(topic.created_time)).fromNow(refresh=True)#}
-                {% set create_time = datetime.fromtimestamp(topic.created_time) %}
-                <span>发布于 {{ moment(create_time).fromNow(refresh=True) }}</span>
-                <span>作者 <a href="{{ url_for('index.profile', username=u.username) }}">{{ u.username }}</a></span>
+                {% set create_time = datetime.utcfromtimestamp(topic.created_time) %}
+                {{ moment(create_time).format('LLL') }}
+                <span>作者: <a href="{{ url_for('index.profile', username=u.username) }}">{{ u.username }}</a></span>
                 <span>{{ topic.views }} 次浏览</span>
                 <span>来自 问答</span>
 {#                todo: 问答改成对应的话题#}

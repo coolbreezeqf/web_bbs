@@ -42,7 +42,7 @@ body {
   overflow: hidden;
 }
 #content .changes span:before {
-  content: "|";
+  content: "| ";
 }
 #content .changes a {
   /*color: inherit;*/
@@ -518,6 +518,9 @@ a.topic_title {
   vertical-align: middle;
   font-size: 16px;
   line-height: 30px;
+}
+.topic_list span.topic_create_time {
+  float: right;
 }
 #topic_list a.topic_title {
   color: #333;

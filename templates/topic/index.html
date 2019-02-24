@@ -29,11 +29,12 @@
                     {% for t in ms %}
                     <div class="cell">
                         <div class="topic_title_wrapper">
-                            <a class="topic_title" href="{{ url_for('topic.detail', id=t.id) }}">
+                            <span><a class="topic_title" href="{{ url_for('topic.detail', id=t.id) }}">
                                 {{ t.title }}
-                            </a>
-                            <span>{{ t.replies() | count }} / {{ t.views }}</span>
-                            <!--<a class="topic_title" href="{{ url_for('topic.delete', id=t.id) }}">-->
+                            </a></span>
+                            <span style="margin-left: 10px;    vertical-align: middle;">{{ t.replies() | count }} / {{ t.views }}</span>
+                            {% set create_time = datetime.utcfromtimestamp(t.created_time) %}
+                            <span class="topic_create_time">{{ moment(create_time).fromNow(refresh=True) }}</span>
 {#                            <a class="topic_title" href="{{ url_for('topic.delete', id=t.id, token=token) }}">#}
 {#                                删除#}
 {#                            </a>#}
