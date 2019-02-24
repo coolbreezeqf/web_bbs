@@ -43,8 +43,9 @@ def delete():
 
 
 @main.route("/new")
+@login_required
 def new():
-    board_id = int(request.args.get('board_id'))
+    board_id = int(request.args.get('board_id', 0))
     bs = Board.all()
     # return render_template("topic/new.html", bs=bs, bid=board_id)
     token = new_csrf_token()

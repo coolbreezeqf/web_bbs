@@ -22,6 +22,7 @@ def login_required(f):
             return redirect(url_for('index.login'))
         else:
             return f(*args, **kwargs)
+    return wrapper
 
 def csrf_required(f):
     @wraps(f)
