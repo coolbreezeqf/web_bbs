@@ -18,9 +18,9 @@ def reset_database():
     e = create_engine(uri, echo=True)
 
     with e.connect() as c:
-        c.execute('DROP DATABASE IF EXISTS web21')
-        c.execute('CREATE DATABASE web21 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')
-        c.execute('USE web21')
+        c.execute('DROP DATABASE IF EXISTS web_bbs')
+        c.execute('CREATE DATABASE web_bbs CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')
+        c.execute('USE web_bbs')
 
     db.metadata.create_all(bind=e)
 

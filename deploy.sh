@@ -1,4 +1,4 @@
-# 1. 拉代码到 /var/www/web21
+# 1. 拉代码到 /var/www/web_bbs
 # 2. 执行 bash deploy.sh
 
 set -ex
