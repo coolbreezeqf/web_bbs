@@ -22,26 +22,10 @@
                                  {{ user.describe }}
                             ”
                         </span>
-{#                        <span class="big">540</span> 积分#}
-{##}
-{#                        <li>#}
-{#                            <a class="dark" href="https://cnodejs.org/user/fuxingZhang/collections" target="_blank">#}
-{#                                <span class="big collect-topic-count">1</span>个话题收藏#}
-{#                            </a>#}
-{#                        </li>#}
-{##}
-{##}
-{#                        <li>#}
-{#                            <i class="fa fa-lg fa-fw fa-github"></i>#}
-{#                            <a class="dark" href="https://github.com/fuxingZhang" target="_blank">#}
-{#                                @fuxingZhang#}
-{#                            </a>#}
-{#                        </li>#}
-{##}
-{##}
                     </ul>
                 </div>
-                <p class="col_fade">注册时间 9 个月前</p>
+                {% set create_time = datetime.utcfromtimestamp(user.created_time) %}
+                <p class="col_fade">注册时间 {{ moment(create_time).fromNow() }}</p>
 
             </div>
         </div>
@@ -68,15 +52,20 @@
                   </span>
 
                 {% if topic.reply_count() != 0 %}
-                    {% set reply_user = topic.replies()[-1].user() %}
+                    {% set last_reply = topic.replies()[-1] %}
+                    {% set reply_user = last_reply.user() %}
+                    <a class="last_time pull-right"
+                       href="{{ url_for('index.profile', username=reply_user.username) }}">
+                        <img class="user_small_avatar" src="{{ reply_user.image }}">
+                        {% set create_time = datetime.utcfromtimestamp(last_reply.created_time) %}
+                        <span class="last_active_time">{{ moment(create_time).fromNow() }}</span>
+                    </a>
                 {% else %}
-                    {% set reply_user = current_user %}
+                    {% set create_time = datetime.utcfromtimestamp(topic.created_time) %}
+                    <a class="last_time pull-right" href="">{{ moment(create_time).fromNow() }}</a>
                 {% endif %}
-                <a class="last_time pull-right"
-                   href="{{ url_for('index.profile', username=reply_user.username) }}">
-                    <img class="user_small_avatar" src="{{ reply_user.image }}">
-                    <span class="last_active_time">1 小时前</span>
-                </a>
+
+
 
 
                 <div class="topic_title_wrapper">
@@ -115,15 +104,19 @@
                     </span>
                   </span>
                 {% if topic.reply_count() != 0 %}
-                    {% set reply_user = topic.replies()[-1].user() %}
+                    {% set last_reply = topic.replies()[-1] %}
+                    {% set reply_user = last_reply.user() %}
+                    <a class="last_time pull-right"
+                       href="{{ url_for('index.profile', username=reply_user.username) }}">
+                        <img class="user_small_avatar" src="{{ reply_user.image }}">
+                        {% set create_time = datetime.utcfromtimestamp(last_reply.created_time) %}
+                        <span class="last_active_time">{{ moment(create_time).fromNow() }}</span>
+                    </a>
                 {% else %}
-                    {% set reply_user = current_user %}
+                    {% set create_time = datetime.utcfromtimestamp(topic.created_time) %}
+                    <a class="last_time pull-right" href="">{{ moment(create_time).fromNow() }}</a>
                 {% endif %}
-                <a class="last_time pull-right"
-                   href="{{ url_for('index.profile', username=reply_user.username) }}">
-                    <img class="user_small_avatar" src="{{ reply_user.image }}">
-                    <span class="last_active_time">1 小时前</span>
-                </a>
+
 
                 <div class="topic_title_wrapper">
                     <a class="topic_title" href="{{ url_for('topic.detail', id=topic.id) }}"
