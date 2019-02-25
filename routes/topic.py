@@ -27,9 +27,10 @@ def index():
 
 @main.route('/<int:id>')
 def detail(id):
-    m = Topic.get(id)
+    m: Topic = Topic.get(id)
     # 传递 topic 的所有 reply 到 页面中
-    return render_template("topic/detail.html", topic=m)
+    board = Board.one(id=m.board_id)
+    return render_template("topic/detail.html", topic=m, board=board)
 
 
 @main.route("/delete")
