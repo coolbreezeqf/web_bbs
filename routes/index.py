@@ -10,7 +10,8 @@ from flask import (
     Blueprint,
     make_response,
     abort,
-    send_from_directory
+    send_from_directory,
+    flash
 )
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
@@ -53,7 +54,8 @@ def login():
     if form:
         u = User.validate_login(form)
         if u is None:
-            return redirect(url_for('.index'))
+            flash('username or password is wrong.')
+            return render_template('login.html')
         else:
             # session 中写入 user_id
             session['user_id'] = u.id

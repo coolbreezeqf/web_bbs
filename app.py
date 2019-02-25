@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_moment import Moment
+from flask_bootstrap import Bootstrap
 from datetime import datetime
 
 import secret
@@ -39,6 +40,7 @@ def configured_app():
     mail.init_app(app)
     redis_store.init_app(app)
     moment = Moment(app)
+    bootstrap = Bootstrap(app)
 
     register_template_func(app)
     register_routes(app)
