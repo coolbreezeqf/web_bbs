@@ -5,11 +5,11 @@ __pycache__/
 .env
 .gitattributes
 
+!images/demo.gif
 images/
 !images/default_*
 !images/favicon.ico
 !images/icon*
-!images/demo.gif
 
 secret.py
 
