@@ -67,7 +67,7 @@ def login():
         u = User.validate_login(form.data)
         if u is None:
             flash('username or password is wrong.')
-            return render_template('login.html')
+            return render_template('login.html', form=form)
         else:
             # session 中写入 user_id
             session['user_id'] = u.id
