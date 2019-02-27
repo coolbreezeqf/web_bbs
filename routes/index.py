@@ -21,8 +21,10 @@ from models.topic import Topic
 from models.user import User
 from routes import current_user
 
-import json
+from forms.register import RegisterForm
+from forms.login import LoginForm
 
+import json
 import redis
 
 cache = redis.StrictRedis()
@@ -40,19 +42,29 @@ def index():
     return redirect(url_for('topic.index'))
 
 
-@main.route("/register", methods=['POST'])
+@main.route("/register", methods=['GET', 'POST'])
 def register():
-    form = request.form.to_dict()
-    # 用类函数来判断
-    u = User.register(form)
-    return redirect(url_for('.index'))
+    # form = request.form.to_dict()
+    # # 用类函数来判断
+    # u = User.register(form)
+    # flash("注册" + ("成功" if u else "失败"))
+    # return redirect(url_for('.login'))
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user = User.register(form.data)
+        if user:
+            flash('注册成功')
+        else:
+            flash('注册失败')
+        return redirect(url_for('.login'))
+    return render_template("register.html", form=form)
 
 
 @main.route("/login", methods=['GET', 'POST'])
 def login():
-    form = request.form
-    if form:
-        u = User.validate_login(form)
+    form = LoginForm()
+    if form.validate_on_submit():
+        u = User.validate_login(form.data)
         if u is None:
             flash('username or password is wrong.')
             return render_template('login.html')
@@ -64,7 +76,7 @@ def login():
             # 转到 topic.index 页面
             return redirect(url_for('topic.index'))
     else:
-        return render_template('login.html')
+        return render_template('login.html', form=form)
 
 @main.route("/logout")
 def logout():

@@ -5,13 +5,11 @@
         <div class="header">
             <ul class="breadcrumb">
                 <li><a href="{{ url_for('index.index') }}">主页</a><span class="divider">/</span></li>
-                <li class="active">登陆</li>
+                <li class="active">注册</li>
             </ul>
         </div>
-
         <div class="cell" style="width: 30%; margin-left: 20px;">
-            {{ wtf.quick_form(form) }}
-            <a href="{{ url_for('.register') }}">没有账号？去注册</a>
+        {{ wtf.quick_form(form) }}
         </div>
     </div>
 {% endblock %}
