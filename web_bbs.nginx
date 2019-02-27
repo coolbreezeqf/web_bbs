@@ -1,7 +1,7 @@
 server {
     listen 80;
     server_name bbs.colbrze.xyz colbrze.xyz www.colbrze.xyz *.colbrze.xyz;
-    client_max_body_size 2M
+    client_max_body_size 2M;
     location /images {
         alias /var/www/web_bbs/images;
     }
