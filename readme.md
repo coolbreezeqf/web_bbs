@@ -6,4 +6,4 @@
 后端基于 `Flask` 开发，前端使用 `Jinja2` 模板结合 `Bootstrap` 完成。
 
 ## 演示
-![演示](images/doge.gif) 
+![演示](images/demo.gif) 
